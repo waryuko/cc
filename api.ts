@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:3001/tasks";
+const baseUrl = "https://todolist-api-bl9z.onrender.com/tasks";
 
 export interface Task {
     id: string;
