@@ -7,6 +7,9 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  daisyui: {
+    themes: ["light"],
+  },
   theme: {
     extend: {
       backgroundImage: {
@@ -16,6 +19,7 @@ const config: Config = {
       },
     },
   },
+
   plugins: [require("daisyui")],
   
 };

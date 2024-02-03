@@ -1,25 +1,41 @@
 "use client";
-import {FormEventHandler, useState} from "react";
+import {FormEventHandler, useEffect, useState} from "react";
 import {GoPlus} from "react-icons/go";
 import Modal from "./Modal";
-import {createTask} from "@/api";
-import {v4 as uuidv4} from 'uuid';
 import {useRouter} from "next/navigation";
-const AddTask = () => {
+import {createTaskForUser} from "@/api";
+
+interface addTaskProps {
+    refresh: () => void;
+}
+
+const AddTask = ({refresh}: addTaskProps) => {
     const router = useRouter();
     const [showModal, setShowModal] = useState(false);
     const [taskName, setTaskName] = useState("");
+
+    useEffect(() => {
+        const userId = localStorage.getItem('userID');
+        if (!userId) {
+            // Redirect to the login page if userID is not present
+            router.push('/login'); // Update with your login page route
+        }
+    }, []); // Empty dependency array ensures the effect runs only once on mount
+
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
-        await createTask({
-            id: uuidv4(),
-            title: taskName,
+        const userId = localStorage.getItem('userID');
 
-        });
+        if (!userId) {
+            // Redirect to login if user ID is not present
+            router.push('/login'); // Update with your login page route
+            return;
+        }
+
+        await createTaskForUser(userId!, taskName);
         setShowModal(false);
         setTaskName("");
-        router.refresh();
-
+        refresh();
     }
     return (<div>
         <button
